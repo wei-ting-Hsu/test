@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>降頭術全解：愛情挽回與詛咒的神秘力量</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutrals & Mystic Bronze -->
+    <!-- Background: #F9F7F2 (Warm Parchment) -->
+    <!-- Text: #4A4A4A (Dark Grey for readability) -->
+    <!-- Primary: #8C7B75 (Muted Taupe) -->
+    <!-- Accent: #C5A065 (Muted Gold) -->
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: {
+                            50: '#FBF9F6',
+                            100: '#F7F5F0',
+                            200: '#EFEBE0',
+                            300: '#E6DFCC',
+                            800: '#5C5446',
+                            900: '#3D362B',
+                        },
+                        mystic: {
+                            gold: '#C5A065',
+                            bronze: '#8C7B75',
+                            dark: '#2C2C2C',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif TC"', 'serif'],
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F7F5F0;
+            color: #4A4A4A;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .tab-active {
+            border-bottom: 2px solid #C5A065;
+            color: #3D362B;
+            font-weight: bold;
+        }
+        .tab-inactive {
+            color: #8C7B75;
+            border-bottom: 2px solid transparent;
+        }
+        .accordion-content {
+            transition: max-height 0.3s ease-out;
+            max-height: 0;
+            overflow: hidden;
+        }
+        .accordion-content.active {
+            max-height: 500px; /* Approximate max height */
+        }
+    </style>
+
+    <!-- Application Structure Plan: 
+         1. Hero Section: Sets the tone, introduces the concept of "willingness" and the power of sorcery.
+         2. Principles & Data (Dashboard): Uses Chart.js to visualize the "Success Formula" and "Effect Timeline". This transforms abstract text into understandable metrics.
+         3. The Masters (Interactive Grid): A filterable list of masters. Users can select "Love", "Curse", etc., to find the right master, simulating a consultation experience.
+         4. Service Process (Stepper): Breaks down the administrative process into clear, manageable steps.
+         5. FAQ (Accordion): Handles the doubts and risks section cleanly.
+         Rationale: The report contains a mix of emotional storytelling, technical rules, and catalog data. A dashboard/catalog hybrid structure allows emotional engagement first, then logical exploration.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Success Factors (Doughnut Chart): Visualizes the "Formula" mentioned in the text (Master + Spirit + Fate + Effort). Goal: Inform users that success isn't 100% magic.
+         2. Effect Timeline (Line Chart): Visualizes the 7-day to 3-month cycle. Goal: Manage expectations regarding time.
+         3. Master Cards: Presents the "Master List" as a catalog. Interaction: Filtering by intent.
+         4. Process Steps: Visualizes the workflow. Goal: Clarity and trust.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-parchment-100/90 backdrop-blur-md border-b border-parchment-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <span class="text-2xl font-serif font-bold text-mystic-dark">降頭術全解</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <button onclick="scrollToSection('intro')" class="text-parchment-800 hover:text-mystic-gold transition-colors">緣起</button>
+                    <button onclick="scrollToSection('principles')" class="text-parchment-800 hover:text-mystic-gold transition-colors">原理與效力</button>
+                    <button onclick="scrollToSection('masters')" class="text-parchment-800 hover:text-mystic-gold transition-colors">嚴選師父</button>
+                    <button onclick="scrollToSection('process')" class="text-parchment-800 hover:text-mystic-gold transition-colors">流程</button>
+                    <button onclick="scrollToSection('faq')" class="text-parchment-800 hover:text-mystic-gold transition-colors">常見問答</button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-parchment-800 focus:outline-none">
+                        <span class="text-2xl">☰</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-parchment-100 border-t border-parchment-200">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button onclick="scrollToSection('intro')" class="block w-full text-left px-3 py-2 text-parchment-800 hover:bg-parchment-200 rounded-md">緣起</button>
+                <button onclick="scrollToSection('principles')" class="block w-full text-left px-3 py-2 text-parchment-800 hover:bg-parchment-200 rounded-md">原理與效力</button>
+                <button onclick="scrollToSection('masters')" class="block w-full text-left px-3 py-2 text-parchment-800 hover:bg-parchment-200 rounded-md">嚴選師父</button>
+                <button onclick="scrollToSection('process')" class="block w-full text-left px-3 py-2 text-parchment-800 hover:bg-parchment-200 rounded-md">流程</button>
+                <button onclick="scrollToSection('faq')" class="block w-full text-left px-3 py-2 text-parchment-800 hover:bg-parchment-200 rounded-md">常見問答</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="intro" class="relative bg-parchment-100 py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold text-mystic-dark mb-6 tracking-wide leading-tight">
+                世間法理萬千，難敵一句甘願
+            </h1>
+            <div class="w-24 h-1 bg-mystic-gold mx-auto mb-8"></div>
+            <p class="text-lg md:text-xl text-parchment-800 leading-relaxed mb-8">
+                當一個人為了愛情或執念甘願付出一切時，現實的規則顯得微不足道。<br>
+                在這樣的信念下，古老而神秘的**降頭術**成為了最後的希望。
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
+                <div class="p-6 bg-white rounded-lg shadow-sm border border-parchment-200">
+                    <div class="text-3xl mb-3 text-mystic-gold">♥</div>
+                    <h3 class="font-bold text-lg mb-2">愛情挽回</h3>
+                    <p class="text-sm text-gray-600">修復裂痕，重喚甜蜜記憶，讓對方主動回頭。</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-sm border border-parchment-200">
+                    <div class="text-3xl mb-3 text-mystic-gold">✦</div>
+                    <h3 class="font-bold text-lg mb-2">開運招財</h3>
+                    <p class="text-sm text-gray-600">調整磁場，提升個人魅力與人緣運勢。</p>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow-sm border border-parchment-200">
+                    <div class="text-3xl mb-3 text-mystic-gold">⚔</div>
+                    <h3 class="font-bold text-lg mb-2">詛咒懲戒</h3>
+                    <p class="text-sm text-gray-600">以靈力制衡仇敵，讓其運勢低迷、諸事不順。</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Principles Section (Charts) -->
+    <section id="principles" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-mystic-dark">降頭術的力量與原理</h2>
+                <p class="mt-4 text-parchment-800 max-w-2xl mx-auto">
+                    降頭術並非單純的迷信，而是結合了天地靈氣、師父修為與靈體助力的能量運作。
+                    了解其運作週期與成功要素，能幫助您建立正確的期待。
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                
+                <!-- Timeline Chart -->
+                <div class="bg-parchment-50 p-6 rounded-xl shadow-sm border border-parchment-200">
+                    <h3 class="text-xl font-bold text-mystic-dark mb-4 text-center">法事效力週期</h3>
+                    <p class="text-sm text-gray-600 mb-6 text-center">
+                        靈力啟動後並非永續，而是有一個明顯的黃金週期。把握前三個月是關鍵。
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-500 bg-white p-3 rounded border border-parchment-200">
+                        <strong class="text-mystic-gold">關鍵提醒：</strong> 效力約持續三個月。這是一個「時間窗口」，您必須在此期間積極行動（如聯繫、改變自己）以鞏固緣分。
+                    </div>
+                </div>
+
+                <!-- Success Factors Chart -->
+                <div class="bg-parchment-50 p-6 rounded-xl shadow-sm border border-parchment-200">
+                    <h3 class="text-xl font-bold text-mystic-dark mb-4 text-center">影響成功的因素</h3>
+                    <p class="text-sm text-gray-600 mb-6 text-center">
+                        沒有100%的法術。成功是多重因素的總和結果。
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="successChart"></canvas>
+                    </div>
+                    <div class="mt-4 space-y-2 text-sm text-gray-600">
+                        <p><strong>師父法力 & 靈體 (50%)：</strong> 核心驅動力，如同醫生的醫術。</p>
+                        <p><strong>雙方殘存緣分 (20%)：</strong> 過往感情基礎越深，成功率越高。</p>
+                        <p><strong>委託人努力 (20%)：</strong> 自我提升與把握契機的行動力。</p>
+                        <p><strong>外在阻力 (-10%~0)：</strong> 對方是否有強大宗教庇佑或環境干擾。</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Masters Section -->
+    <section id="masters" class="py-16 bg-parchment-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-serif font-bold text-mystic-dark">嚴選正統師父</h2>
+                <p class="mt-4 text-parchment-800">
+                    我們走訪東南亞上百位法師，剔除造假者，僅保留真正具備修為與傳承的師父。
+                    <br>請依照您的「眼緣」與直覺進行選擇。
+                </p>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex justify-center space-x-4 mb-8 flex-wrap gap-y-2">
+                <button onclick="filterMasters('all')" id="btn-all" class="px-6 py-2 rounded-full border border-mystic-bronze bg-mystic-bronze text-white transition hover:opacity-90">全部</button>
+                <button onclick="filterMasters('love')" id="btn-love" class="px-6 py-2 rounded-full border border-mystic-bronze text-mystic-bronze hover:bg-parchment-200 transition">愛情挽回</button>
+                <button onclick="filterMasters('curse')" id="btn-curse" class="px-6 py-2 rounded-full border border-mystic-bronze text-mystic-bronze hover:bg-parchment-200 transition">詛咒懲戒</button>
+                <button onclick="filterMasters('wealth')" id="btn-wealth" class="px-6 py-2 rounded-full border border-mystic-bronze text-mystic-bronze hover:bg-parchment-200 transition">招財開運</button>
+            </div>
+
+            <!-- Grid -->
+            <div id="masters-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Cards will be injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" class="py-16 bg-white">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-serif font-bold text-mystic-dark">委託服務流程</h2>
+                <p class="mt-4 text-parchment-800">
+                    透明、嚴謹的六大步驟，確保法事正統進行，保障您的權益。
+                </p>
+            </div>
+
+            <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-parchment-300 before:to-transparent">
+                
+                <!-- Step 1 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-mystic-gold bg-parchment-100 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-bold text-mystic-gold">1</div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-parchment-50 p-6 rounded border border-parchment-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-2 text-mystic-dark">提供資料</h3>
+                        <p class="text-sm text-gray-600">雙方姓名、西元出生日期、清晰正面照片。照片是靈力鎖定的關鍵媒介，不可或缺。</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-mystic-gold bg-parchment-100 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-bold text-mystic-gold">2</div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-parchment-50 p-6 rounded border border-parchment-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-2 text-mystic-dark">確認與付款</h3>
+                        <p class="text-sm text-gray-600">確認資料無誤後付款。費用包含供品與功德金。師父若審核後拒接，我們將全額退款。</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-mystic-gold bg-parchment-100 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-bold text-mystic-gold">3</div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-parchment-50 p-6 rounded border border-parchment-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-2 text-mystic-dark">師父開壇</h3>
+                        <p class="text-sm text-gray-600">師父擇吉時進行儀式。如遇天氣等不可抗力會順延，確保儀式完整。</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-mystic-gold bg-parchment-100 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-bold text-mystic-gold">4</div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-parchment-50 p-6 rounded border border-parchment-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-2 text-mystic-dark">進度回報</h3>
+                        <p class="text-sm text-gray-600">每日發送法事現場照片或影片，讓您遠端親眼見證，安心等待。</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-mystic-gold bg-parchment-100 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 font-bold text-mystic-gold">5</div>
+                    <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-parchment-50 p-6 rounded border border-parchment-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-2 text-mystic-dark">法事圓滿與觀察</h3>
+                        <p class="text-sm text-gray-600">儀式結束，靈體開始運作。進入1-3個月的觀察與配合期，把握契機。</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-parchment-100">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-serif font-bold text-mystic-dark">常見疑問與風險</h2>
+                <p class="mt-4 text-parchment-800">
+                    面對未知的法術，有疑問是正常的。我們在此坦誠解答您的所有顧慮。
+                </p>
+            </div>
+
+            <div class="space-y-4" id="faq-container">
+                <!-- FAQ items injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-mystic-dark text-parchment-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-serif font-bold mb-4 text-white">關於我們</h3>
+                    <p class="text-sm text-gray-400 mb-4">
+                        我們的團隊（包括阿贊柔與九哥）植根於泰國法術界，擁有正統傳承。我們不只是仲介，更是您與靈界、大師之間的可靠橋樑。資料絕對保密，誠信為本。
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-serif font-bold mb-4 text-white">服務聲明</h3>
+                    <p class="text-sm text-gray-400">
+                        本網站內容涉及宗教民俗信仰，僅供參考。降頭術為輔助契機，人生轉變仍需配合自身努力與正向心態。<br>
+                        所有法事一旦開始，相關供品成本無法退還，請謹慎決定。
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-500">
+                &copy; 2025 Mystic Affinity Services. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Data ---
+        const mastersData = [
+            {
+                id: 'nalin',
+                name: '阿贊那林',
+                title: '墓地大鬼降',
+                price: '價格私訊',
+                duration: '4 天',
+                desc: '低調卻頗負盛名的控靈師，長年隱居深山。擅長將特定鬼靈鍛鍊為強大聖物。與其妻（王師父）聯手，法力強大。',
+                tags: ['love', 'curse'],
+                status: 'available'
+            },
+            {
+                id: 'gou',
+                name: '阿贊勾',
+                title: '素林府黑派',
+                price: '價格私訊',
+                duration: '3 天',
+                desc: '佛學碩士，師承高僧龍普宏。結合泰國與柬埔寨古法，精通符刺、魅婆術與招財咒。受當地僧侶敬重。',
+                tags: ['love', 'wealth', 'curse'],
+                status: 'available'
+            },
+            {
+                id: 'chalerm',
+                name: '阿贊茶冷',
+                title: '清邁屍魂血降',
+                price: '價格私訊',
+                duration: '7 天',
+                desc: '幽冥法門宗師，以亡者之血引渡幽魂。法事風格莊嚴肅穆，擅長處理極端隱秘的委託，靈力場強大。',
+                tags: ['love', 'curse'],
+                status: 'available'
+            },
+            {
+                id: 'pengxi',
+                name: '阿贊彭喜',
+                title: '古法招魂降',
+                price: '暫停接受委託',
+                duration: '7 天',
+                desc: '師承古巴磐石，獨門蠟燭招魂控靈。擅長增魅鎖心奪魄。目前因聖料稀缺暫停委託。',
+                tags: ['love'],
+                status: 'paused'
+            }
+        ];
+
+        const faqData = [
+            {
+                q: "會有「反噬」嗎？會不會害到自己？",
+                a: "不會。所有因果與靈力支出均由師父在施法時透過供品與自身修行承擔平衡。委託人僅提供資料，未親自作法，無需擔心反噬。"
+            },
+            {
+                q: "成功率有多高？真的能挽回嗎？",
+                a: "沒有100%的法術。成功率取決於：師父法力、靈體力量、雙方殘存緣分以及您後續的努力。降頭術是為您創造契機，把握契機還需靠您自己。"
+            },
+            {
+                q: "法事需要多久時間見效？",
+                a: "法事當天靈力啟動。通常第7天效果逐漸增強，1-3個月內達到高峰期。這是您行動的黃金時間。3個月後效果會緩慢消退。"
+            },
+            {
+                q: "隱私安全嗎？資料會不會外流？",
+                a: "絕對安全。我們從業十多年零外流記錄。資料僅供師父施法使用，絕不另作他用。我們深知信任的重要性，視客戶隱私為生命。"
+            },
+            {
+                q: "如果師父評估後不接單怎麼辦？",
+                a: "若師父認為緣分已盡或條件不符而婉拒，我們將全額退還款項。這種情況約佔5%以下，我們保障您的金錢權益。"
+            }
+        ];
+
+        // --- Functions ---
+
+        // Smooth Scroll
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        // Toggle Mobile Menu
+        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Render Masters
+        function renderMasters(filter) {
+            const container = document.getElementById('masters-grid');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? mastersData 
+                : mastersData.filter(m => m.tags.includes(filter));
+
+            filtered.forEach(m => {
+                const statusBadge = m.status === 'paused' 
+                    ? `<span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">暫停委託</span>` 
+                    : `<span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">可預約</span>`;
+
+                const html = `
+                    <div class="bg-white rounded-lg border border-parchment-200 p-6 card-hover flex flex-col h-full relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-mystic-gold"></div>
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-mystic-dark">${m.name}</h3>
+                                <p class="text-sm text-mystic-bronze font-serif">${m.title}</p>
+                            </div>
+                            ${statusBadge}
+                        </div>
+                        <p class="text-gray-600 text-sm mb-6 flex-grow leading-relaxed">
+                            ${m.desc}
+                        </p>
+                        <div class="mt-auto border-t border-parchment-200 pt-4 space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500">法事期</span>
+                                <span class="font-medium">${m.duration}</span>
+                            </div>
+                            <div class="flex justify-between text-sm items-center">
+                                <span class="text-gray-500">費用</span>
+                                <span class="font-bold text-mystic-dark text-lg">${m.price}</span>
+                            </div>
+                            <button class="w-full mt-4 bg-mystic-dark text-white py-2 rounded hover:bg-opacity-90 transition text-sm">
+                                諮詢詳情
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function filterMasters(type) {
+            // Update UI buttons
+            const buttons = ['all', 'love', 'curse', 'wealth'];
+            buttons.forEach(btn => {
+                const el = document.getElementById(`btn-${btn}`);
+                if (btn === type) {
+                    el.classList.add('bg-mystic-bronze', 'text-white');
+                    el.classList.remove('text-mystic-bronze');
+                } else {
+                    el.classList.remove('bg-mystic-bronze', 'text-white');
+                    el.classList.add('text-mystic-bronze');
+                }
+            });
+            renderMasters(type);
+        }
+
+        // Render FAQ
+        function renderFAQ() {
+            const container = document.getElementById('faq-container');
+            faqData.forEach((item, index) => {
+                const html = `
+                    <div class="bg-white border border-parchment-200 rounded-lg overflow-hidden">
+                        <button class="w-full text-left px-6 py-4 focus:outline-none flex justify-between items-center bg-parchment-50 hover:bg-parchment-100 transition" onclick="toggleFAQ(${index})">
+                            <span class="font-bold text-mystic-dark">Q: ${item.q}</span>
+                            <span id="icon-${index}" class="text-mystic-gold text-xl transition-transform transform">+</span>
+                        </button>
+                        <div id="content-${index}" class="accordion-content bg-white">
+                            <div class="px-6 py-4 text-gray-700 leading-relaxed border-t border-parchment-200">
+                                <span class="font-bold text-mystic-bronze mr-2">A:</span> ${item.a}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function toggleFAQ(index) {
+            const content = document.getElementById(`content-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+            
+            // Toggle active class
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.innerText = "+";
+                icon.style.transform = "rotate(0deg)";
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.innerText = "−";
+                icon.style.transform = "rotate(180deg)";
+            }
+        }
+
+        // --- Charts Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMasters('all');
+            renderFAQ();
+
+            // 1. Timeline Chart
+            const ctxTimeline = document.getElementById('timelineChart').getContext('2d');
+            new Chart(ctxTimeline, {
+                type: 'line',
+                data: {
+                    labels: ['Start', 'Day 7', '1 Month', '3 Months', '6 Months'],
+                    datasets: [{
+                        label: '靈力影響強度',
+                        data: [10, 40, 95, 80, 20],
+                        borderColor: '#C5A065', // Gold
+                        backgroundColor: 'rgba(197, 160, 101, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#8C7B75'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y + '% 強度: ' + (context.parsed.y > 80 ? '黃金行動期' : '靈力消退中');
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: { display: true, text: '影響力 %' },
+                            grid: { color: '#EFEBE0' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Success Factors Chart
+            const ctxSuccess = document.getElementById('successChart').getContext('2d');
+            new Chart(ctxSuccess, {
+                type: 'doughnut',
+                data: {
+                    labels: ['師父法力 & 靈體', '雙方殘存緣分', '委託人努力', '外在阻力'],
+                    datasets: [{
+                        data: [50, 20, 20, 10],
+                        backgroundColor: [
+                            '#8C7B75', // Bronze (Main)
+                            '#C5A065', // Gold (Fate)
+                            '#5C5446', // Dark Brown (Effort)
+                            '#E6DFCC'  // Light (Obstacles)
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
